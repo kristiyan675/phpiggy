@@ -5,21 +5,39 @@ declare(strict_types=1);
 namespace Framework;
 
 
-class App {
+class App
+{
     private Router $router;
+    private Container $container;
 
-    public function __construct()
+    public function __construct(string $containerDefinitionsPath = null)
     {
         $this->router = new Router();
+        $this->container = new Container();
+
+
+        // echo include $containerDefinitionsPath;
+        if ($containerDefinitionsPath) {
+            $containerDefinitionsPath = include $containerDefinitionsPath;
+            $this->container->addDefinitions($containerDefinitionsPath);
+        }
     }
 
-    public function run () {
+    public function run()
+    {
         $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
         $method = $_SERVER["REQUEST_METHOD"];
-        $this->router->dispatch($path, $method);
+        $this->router->dispatch($path, $method, $this->container);
     }
 
-    public function get(string $path, $controller){
+    public function get(string $path, $controller)
+    {
         $this->router->add('GET', $path, $controller);
+    }
+
+
+    public function addMiddleware(string $middleware)
+    {
+        $this->router->addMiddleware($middleware);
     }
 }

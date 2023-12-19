@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 require __DIR__ . "/../../vendor/autoload.php";
 
-use App\Controllers\{HomeController, AboutController};
 use Framework\App;
-use function App\Config\registerRoutes;
+use App\Config\Paths;
+use function App\Config\{registerRoutes, registerMiddleware};
 
-$app = new App();
+// dd(Paths::SOURCE);
+
+$app = new App(Paths::SOURCE . "App/container-definitions.php");
 
 registerRoutes($app);
+registerMiddleware($app);
 
 
 return $app;
