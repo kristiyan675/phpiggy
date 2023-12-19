@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Framework;
 
-include __DIR__ . "/../App/functions.php";
-
 class Router
 {
     private array $routes = [];
